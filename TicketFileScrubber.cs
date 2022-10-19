@@ -8,9 +8,14 @@ namespace TicketSystem
 public static class FileScrubber{
     private static NLog.Logger logger = NLogBuilder.ConfigureNLog(Directory.GetCurrentDirectory() + "\\nlog.config").GetCurrentClassLogger();
 
-    public static string description { get; private set; }
+        public static string description { get; private set; }
 
-    public static string ScrubTickets(string readFile)
+        public static string ScrubTickets(string readFile, TicketFile TicketFile)
+        {
+            return ScrubTickets(readFile, TicketFile);
+        }
+
+        public static string ScrubTickets(string readFile, TicketFile TicketFile, Ticket ticket)
 {
     try
     {
@@ -28,14 +33,13 @@ public static class FileScrubber{
         StreamReader sr = new StreamReader (readFile);
         sr.ReadLine();
          while(! sr.EndOfStream){
-            var ticket = new Ticket();
             string line = sr.ReadLine();
             int idx = line.IndexOf('"');
             string tickets = "";
             if(idx == -1)
             {
                 string []ticketDetails = line.Split(',');
-                ticket.ticketId = UInt64.Parse(ticketDetails[0]);
+                            ticket.ticketId = UInt64.Parse(ticketDetails[0]);
                 ticket.Type = ticketDetails[1];
                 ticket.description = ticketDetails[2];
                 ticket.status = ticketDetails[3];
@@ -69,5 +73,10 @@ catch (Exception ex)
 
 return "";
 }
-}
+
+        internal static string ScrubTickets(string v)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }
