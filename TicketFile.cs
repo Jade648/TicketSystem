@@ -25,18 +25,21 @@ public class TicketFile {
      public TicketFile(string TicketFilePath, TicketFile ticket)
     {
         filePath = TicketFilePath;
-        Tickets = new List<TicketSystem.Ticket>();
-
-        try{
+        Tickets = new List<Ticket>();
+        try
+        {
             StreamReader sr = new StreamReader(filePath);
-            while(!sr.EndOfStream){
-                TicketFile ticketFile = new TicketFile();
-                string line = sr.ReadLine(); 
+            while (!sr.EndOfStream)
+            {
+
+                string line = sr.ReadLine();
 
                 int idx = line.IndexOf(",");
+
+                TicketFile ticketFile = new TicketFile();
                 if (idx == -1)
                 {
-                    string [] ticketDetails = line.Split(',');
+                    string[] ticketDetails = line.Split(',');
                     ticketFile.ticketId = UInt64.Parse(ticketDetails[0]);
                     ticketFile.Type = ticketDetails[1];
                     List<string> list = ticketDetails[2].Split('|').ToList();
@@ -44,24 +47,27 @@ public class TicketFile {
                     ticketFile.status = ticketDetails[3];
 
                 }
-                else{
-                    ticketFile.ticketId = UInt64.Parse(line.Substring(0,idx-1));
-                    line = line.Substring (idx);
+                else
+                {
+                    ticketFile.ticketId = UInt64.Parse(line.Substring(0, idx - 1));
+                    line = line.Substring(idx);
                     idx = line.LastIndexOf(",");
-                    ticketFile.Type = line.Substring (0,idx +1);
-                    line = line.Substring(idx +2);
-                    string [] details = line.Split(',');
+                    ticketFile.Type = line.Substring(0, idx + 1);
+                    line = line.Substring(idx + 2);
+                    string[] details = line.Split(',');
                     ticketFile.description = details[0].Split('|').ToList();
-                    ticketFile.status = details [1];
-            
+                    ticketFile.status = details[1];
+
                 }
 
-                Tickets.Add(Ticket);
+                Tickets.Add(ticket);
             }
-                sr.Close();
+            sr.Close();
 
-                logger.Info("tickets in file {count}",Tickets.Count);
-            }catch (Exception ex){
+            logger.Info("tickets in file {count}", Tickets.Count);
+        }
+        catch (Exception ex)
+        {
             logger.Error(ex.Message);
         }
 
