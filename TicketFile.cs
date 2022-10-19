@@ -5,27 +5,17 @@ using System.IO;
 using System.Linq;
 using TicketSystem;
 
-public class TicketFile {
+public class BugTicketFile {
 
     private static NLog.Logger logger = NLogBuilder.ConfigureNLog(Directory.GetCurrentDirectory() + "\\nlog.config").GetCurrentClassLogger();
-    private object scrubbedFile;
-    private ulong ticketId;
-    private string Type;
-    private List<string> description;
-    private string status;
+     public Bug Ticket;
+     public List<Bug> Bugs {get;set;}
+     public string filePath {get; set;}
 
-    public TicketFile(object scrubbedFile)
-    {
-        this.scrubbedFile = scrubbedFile;
-    }
-
-    public string filePath {get; set;}
-     public List<TicketSystem.Ticket> Tickets {get; set;}
-
-     public TicketFile(string TicketFilePath, TicketFile ticket)
+     public BugTicketFile(string TicketFilePath)
     {
         filePath = TicketFilePath;
-        Tickets = new List<Ticket>();
+        
         try
         {
             StreamReader sr = new StreamReader(filePath);
@@ -34,37 +24,23 @@ public class TicketFile {
 
                 string line = sr.ReadLine();
 
-                int idx = line.IndexOf(",");
+                Bug bug = new Bug();
+            
+                string[] ticketDetails = line.Split(',');
+                bug.TicketId = UInt64.Parse(ticketDetails[0]);
+                bug.Summary = ticketDetails[1];
+                bug.Status = ticketDetails[2];
+                bug.Priority = ticketDetails[3];
+                bug.Submitter = ticketDetails[4];
+                bug.Assigned = ticketDetails[5];
+                bug.Watching = ticketDetails[6].Split('|').ToList();
+                bug.Severity = ticketDetails [7];
 
-                TicketFile ticketFile = new TicketFile();
-                if (idx == -1)
-                {
-                    string[] ticketDetails = line.Split(',');
-                    ticketFile.ticketId = UInt64.Parse(ticketDetails[0]);
-                    ticketFile.Type = ticketDetails[1];
-                    List<string> list = ticketDetails[2].Split('|').ToList();
-                    ticketFile.description = list;
-                    ticketFile.status = ticketDetails[3];
-
-                }
-                else
-                {
-                    ticketFile.ticketId = UInt64.Parse(line.Substring(0, idx - 1));
-                    line = line.Substring(idx);
-                    idx = line.LastIndexOf(",");
-                    ticketFile.Type = line.Substring(0, idx + 1);
-                    line = line.Substring(idx + 2);
-                    string[] details = line.Split(',');
-                    ticketFile.description = details[0].Split('|').ToList();
-                    ticketFile.status = details[1];
-
-                }
-
-                Tickets.Add(ticket);
+                Bugs.Add(bug);
             }
             sr.Close();
 
-            logger.Info("tickets in file {count}", Tickets.Count);
+            logger.Info("tickets in file {count}", Bugs.Count);
         }
         catch (Exception ex)
         {
