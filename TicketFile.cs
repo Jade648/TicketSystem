@@ -9,7 +9,9 @@ public class BugTicketFile {
 
     private static NLog.Logger logger = NLogBuilder.ConfigureNLog(Directory.GetCurrentDirectory() + "\\nlog.config").GetCurrentClassLogger();
      public Bug Ticket;
-     public List<Bug> Bugs {get;set;}
+    private Bug bug;
+
+    public List<Bug> Bugs {get;set;}
      public string filePath {get; set;}
 
      public BugTicketFile(string TicketFilePath)
@@ -36,8 +38,9 @@ public class BugTicketFile {
                 bug.Watching = ticketDetails[6].Split('|').ToList();
                 bug.Severity = ticketDetails [7];
 
-                Bugs.Add(bug);
             }
+                Bugs.Add(bug);
+
             sr.Close();
 
             logger.Info("tickets in file {count}", Bugs.Count);
@@ -49,3 +52,5 @@ public class BugTicketFile {
 
     }
 }
+
+   

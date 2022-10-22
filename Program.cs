@@ -14,14 +14,52 @@ namespace TicketSystem
         {
             logger.Info("Program started");
 
-        //    String scrubbedFile = FileScrubber.ScrubTickets("Tickets.scrubbed.csv");
-
-           logger.Info("Scrubbed file");
-
            BugTicketFile ticketFile = new BugTicketFile("Tickets.csv");
-            
+
+           string choice = "";
+           do{
+
+            Console.WriteLine ("1)Add Ticket");
+            Console.WriteLine("2) Display all Tickets");
+            Console.WriteLine("Enter to quit");
+             
+             choice = Console.ReadLine();
+             logger.Info("user choice: {choice}",choice);
            
-            logger.Info ("Program ended");
-        }
+          if (choice == "1")
+          {
+
+           Bug bug = new Bug(); 
+           Console.WriteLine("Enter Ticket Id number");
+          bug.TicketId = UInt64.Parse(Console.ReadLine());
+          Console.WriteLine("Enter Ticket Summary");
+          bug.Summary = Console.ReadLine();
+          Console.WriteLine("Enter Ticket Status");
+          bug.Status = Console.ReadLine();
+          Console.WriteLine("Enter Ticket Priority");
+          bug.Priority = Console.ReadLine();
+          Console.WriteLine("Enter Ticket Sumbitter");
+          bug.Submitter = Console.ReadLine();
+          Console.WriteLine("Enter Ticket Assigned");
+          bug.Assigned = Console.ReadLine();
+          Console.WriteLine(" Enter Ticket Watching");
+          bug.Watching = Console.ReadLine();
+
+          }  
+           else if (choice == "2")
+       {
+
+        foreach(Ticket t in "TicketFile.cs"){
+
+             Console.WriteLine(ticketFile.Display());
+          }
+           
     }
+
+   }while (choice == "1" || choice == "2");
+ 
+ logger.Info("Program ended");
+
+}
+}
 }
