@@ -42,22 +42,12 @@ namespace TicketSystem
           bug.Submitter = Console.ReadLine();
           Console.WriteLine("Enter Ticket Assigned");
           bug.Assigned = Console.ReadLine();
-          Console.WriteLine(" Enter Ticket Watching");
-          bug.Watching = Console.ReadLine();
+          Console.WriteLine("Enter Ticket Watchers");
 
           }  
-           else if (choice == "2")
-       {
-
-        foreach(Ticket t in "TicketFile.cs"){
-
-             Console.WriteLine(ticketFile.Display());
-          }
-           
-    }
 
    }while (choice == "1" || choice == "2");
- 
+
  logger.Info("Program ended");
 
 }
